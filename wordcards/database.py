@@ -22,8 +22,6 @@ def get_db():
     db = SessionMaker()
     try:
         yield db
-    except Exception:  # какое исключение указать?
-        db.rollback()
     finally:
         db.close()
 
