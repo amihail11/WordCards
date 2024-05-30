@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from wordcards.config import DATABASE_URL
+from wordcards.models import card
 
 engine = create_engine(DATABASE_URL)
 
@@ -26,6 +27,6 @@ def get_db():
         db.close()
 
 
-Base.metadata.create_all(bind=engine)
+card.Base.metadata.create_all(bind=engine)
 
 DbSession = Annotated[Session, Depends(get_db)]

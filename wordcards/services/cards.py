@@ -8,7 +8,6 @@ from wordcards.schemas.card import CardData
 
 
 def create_card(db: Session, card: CardData):
-    """create a new card"""
     db_card = Card(word=card.word, meaning=card.meaning)
     db.add(db_card)
     db.commit()
@@ -16,22 +15,41 @@ def create_card(db: Session, card: CardData):
     return db_card
 
 
-def read_card(db: Session, card_id: int):
-    """read the card with the given ID"""
+def find_card(db: Session, card_id: int):
     db_card = db.query(Card).filter(Card.card_id == card_id).first()
     if not db_card:
         raise HTTPException(status_code=404, detail="Card not found")
     return db_card
 
 
-def read_all_cards(db: Session):
-    """read all cards from the database"""
+def find_all_cards(db: Session):
     all_cards = db.query(Card).order_by(Card.card_id).all()
     return all_cards
 
 
+def replace_card(db: Session, card_id, card: CardData):
+    db_card = db.query(Card).filter(Card.card_id == card_id).first()
+    if not db_card:
+        raise HTTPException(status_code=404, detail="Card not found")
+    db_card.word = card.word
+    db_card.meaning = card.meaning
+    db.commit()
+    return db_card
+
+
+def update_card(db: Session, card_id, card: CardData):
+    db_card = db.query(Card).filter(Card.card_id == card_id).first()
+    if not db_card:
+        raise (HTTPException(status_code=404, detail="Card not found"))
+    if card.word:
+        db_card.word = card.word
+    if card.meaning:
+        db_card.meaning = card.meaning
+    db.commit()
+    return db_card
+
+
 def delete_card(db: Session, card_id: int):
-    """delete the card with the given ID"""
     result = db.query(Card).filter(Card.card_id == card_id).delete()
     if not result:
         raise HTTPException(status_code=404, detail="Card not found")
