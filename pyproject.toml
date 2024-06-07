@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "wordcards"
+version = "0.1.0"
+description = "\"The Wordcards application for creating cards with foreign words and their meanings for learning these words\""
+authors = ["amihail11 <ar.mihail89@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+alembic = "^1.13.1"
+sqlalchemy = "^2.0.30"
+uvicorn = "^0.30.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
