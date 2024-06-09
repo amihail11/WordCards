@@ -10,6 +10,6 @@ class Card(Base):
 
     __tablename__ = "cards"
 
-    card_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    pk: Mapped[int] = mapped_column("id", primary_key=True, index=True)
     word: Mapped[str]
     meaning: Mapped[str]

@@ -15,20 +15,20 @@ def create_card(db: Session, card: CardData):
     return db_card
 
 
-def find_card(db: Session, card_id: int):
-    db_card = db.query(Card).filter(Card.card_id == card_id).first()
+def find_card(db: Session, pk: int):
+    db_card = db.query(Card).filter(Card.pk == pk).first()
     if not db_card:
         raise HTTPException(status_code=404, detail="Card not found")
     return db_card
 
 
 def find_all_cards(db: Session):
-    all_cards = db.query(Card).order_by(Card.card_id).all()
+    all_cards = db.query(Card).order_by(Card.pk).all()
     return all_cards
 
 
-def replace_card(db: Session, card_id, card: CardData):
-    db_card = db.query(Card).filter(Card.card_id == card_id).first()
+def replace_card(db: Session, pk, card: CardData):
+    db_card = db.query(Card).filter(Card.pk == pk).first()
     if not db_card:
         raise HTTPException(status_code=404, detail="Card not found")
     db_card.word = card.word
@@ -37,10 +37,10 @@ def replace_card(db: Session, card_id, card: CardData):
     return db_card
 
 
-def update_card(db: Session, card_id, card: CardData):
-    db_card = db.query(Card).filter(Card.card_id == card_id).first()
+def update_card(db: Session, pk, card: CardData):
+    db_card = db.query(Card).filter(Card.pk == pk).first()
     if not db_card:
-        raise (HTTPException(status_code=404, detail="Card not found"))
+        raise HTTPException(status_code=404, detail="Card not found")
     if card.word:
         db_card.word = card.word
     if card.meaning:
@@ -49,8 +49,8 @@ def update_card(db: Session, card_id, card: CardData):
     return db_card
 
 
-def delete_card(db: Session, card_id: int):
-    result = db.query(Card).filter(Card.card_id == card_id).delete()
+def delete_card(db: Session, pk: int):
+    result = db.query(Card).filter(Card.pk == pk).delete()
     if not result:
         raise HTTPException(status_code=404, detail="Card not found")
     db.commit(result)

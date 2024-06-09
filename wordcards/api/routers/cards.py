@@ -11,12 +11,12 @@ from wordcards.services import cards
 card_router = APIRouter(prefix="/cards", tags=["cards"])
 
 
-@card_router.post("/")
+@card_router.post("")
 async def create_card(db: DbSession, card: CardData):
     return cards.create_card(db=db, card=card)
 
 
-@card_router.get("/")
+@card_router.get("")
 async def find_all_cards(db: DbSession):
     return cards.find_all_cards(db=db)
 
