@@ -7,19 +7,19 @@ from wordcards.models.card import Card
 from wordcards.schemas.card import CardData
 
 
-def create_card(db: Session, card: CardData):
-    db_card = Card(word=card.word, meaning=card.meaning)
-    db.add(db_card)
+def create_card(db: Session, data: CardData):
+    card = Card(word=data.word, meaning=data.meaning)
+    db.flush()
+    db.add(card)
     db.commit()
-    db.refresh(db_card)
-    return db_card
+    return card
 
 
 def find_card(db: Session, pk: int):
-    db_card = db.query(Card).filter(Card.pk == pk).first()
-    if not db_card:
+    card = db.query(Card).filter(Card.pk == pk).first()
+    if not card:
         raise HTTPException(status_code=404, detail="Card not found")
-    return db_card
+    return card
 
 
 def find_all_cards(db: Session):
@@ -27,31 +27,31 @@ def find_all_cards(db: Session):
     return all_cards
 
 
-def replace_card(db: Session, pk, card: CardData):
-    db_card = db.query(Card).filter(Card.pk == pk).first()
-    if not db_card:
+def replace_card(db: Session, pk, data: CardData):
+    card = db.query(Card).filter(Card.pk == pk).first()
+    if not card:
         raise HTTPException(status_code=404, detail="Card not found")
-    db_card.word = card.word
-    db_card.meaning = card.meaning
+    card.word = data.word
+    card.meaning = data.meaning
     db.commit()
-    return db_card
+    return card
 
 
-def update_card(db: Session, pk, card: CardData):
-    db_card = db.query(Card).filter(Card.pk == pk).first()
-    if not db_card:
+def update_card(db: Session, pk, data: CardData):
+    card = db.query(Card).filter(Card.pk == pk).first()
+    if not card:
         raise HTTPException(status_code=404, detail="Card not found")
-    if card.word:
-        db_card.word = card.word
-    if card.meaning:
-        db_card.meaning = card.meaning
+    if data.word:
+        card.word = data.word
+    if data.meaning:
+        card.meaning = data.meaning
     db.commit()
-    return db_card
+    return card
 
 
 def delete_card(db: Session, pk: int):
     result = db.query(Card).filter(Card.pk == pk).delete()
     if not result:
         raise HTTPException(status_code=404, detail="Card not found")
-    db.commit(result)
+    db.commit()
     return {"success": True}
