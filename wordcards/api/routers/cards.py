@@ -27,12 +27,12 @@ async def find_card(db: DbSession, pk: int):
 
 
 @card_router.put("/{pk}")
-async def replace_card(db: DbSession, pk, data: CardData):
+async def replace_card(db: DbSession, pk: int, data: CardData):
     return cards.replace_card(db=db, pk=pk, data=data)
 
 
 @card_router.patch("/{pk}")
-async def update_card(db: DbSession, pk, data: CardData):
+async def update_card(db: DbSession, pk: int, data: CardData):
     return cards.update_card(db=db, pk=pk, data=data)
 
 
