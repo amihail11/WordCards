@@ -37,7 +37,7 @@ def update_deck(db: Session, pk: int, data: DeckData):
     deck = db.query(Deck).filter(Deck.pk == pk).first()
     if not deck:
         raise HTTPException(status_code=404, detail="Deck not found")
-    if deck.name:
+    if data.name:
         deck.name = data.name
     db.commit()
     return deck
