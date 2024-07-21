@@ -1,7 +1,3 @@
-"""
-The module for creating deck schema
-"""
-
 from pydantic import BaseModel
 
 

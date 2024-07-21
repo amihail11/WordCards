@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from wordcards.api.routers import cards, decks
+from wordcards.api.routers import card, deck
 
 app = FastAPI()
 
-app.include_router(cards.card_router)
-app.include_router(decks.deck_router)
+app.include_router(card.card_router)
+app.include_router(deck.deck_router)
