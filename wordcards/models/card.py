@@ -1,11 +1,13 @@
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wordcards.database import Base
-from wordcards.models.deck import Deck
 
-from .deck_card import deck_card
+from .deck_card import DeckCard
+
+if TYPE_CHECKING:
+    from .deck import Deck
 
 
 class Card(Base):
@@ -15,4 +17,6 @@ class Card(Base):
     pk: Mapped[int] = mapped_column("id", primary_key=True, index=True)
     word: Mapped[str]
     meaning: Mapped[str]
-    decks: Mapped[List[Deck]] = relationship(secondary=deck_card, back_populates="card")
+    decks: Mapped[List["Deck"]] = relationship(
+        secondary=DeckCard, back_populates="cards"
+    )
