@@ -16,5 +16,6 @@ class Deck(Base):
     pk: Mapped[int] = mapped_column("id", primary_key=True, index=True)
     name: Mapped[str]
     cards: Mapped[List["Card"]] = relationship(
-        secondary=DeckCard, back_populates="decks"
+        secondary="deck_card", back_populates="decks"
     )
+    card_associations: Mapped["DeckCard"] = relationship(back_populates="deck")

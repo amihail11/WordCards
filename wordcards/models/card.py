@@ -18,5 +18,6 @@ class Card(Base):
     word: Mapped[str]
     meaning: Mapped[str]
     decks: Mapped[List["Deck"]] = relationship(
-        secondary=DeckCard, back_populates="cards"
+        secondary="deck_card", back_populates="cards"
     )
+    deck_associations: Mapped["DeckCard"] = relationship(back_populates="card")
