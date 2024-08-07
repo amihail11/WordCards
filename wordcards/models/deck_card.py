@@ -14,6 +14,7 @@ class DeckCard(Base):
 
     __tablename__ = "deck_card"
 
+    pk: Mapped[int] = mapped_column("id", primary_key=True, index=True)
     deck_id: Mapped[int] = mapped_column(ForeignKey("deck.id"), primary_key=True)
     card_id: Mapped[int] = mapped_column(ForeignKey("card.id"), primary_key=True)
     deck: Mapped["Deck"] = relationship(back_populates="card_associations")
