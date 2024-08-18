@@ -50,4 +50,5 @@ def delete_deck_card(db: Session, pk: int):
     result = db.query(DeckCard).filter(DeckCard.pk == pk).delete()
     if not result:
         raise HTTPException(status_code=404, detail="Deck card not found")
+    db.commit()
     return {"success": True}
