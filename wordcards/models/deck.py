@@ -8,6 +8,7 @@ from .deck_card import DeckCard
 
 if TYPE_CHECKING:
     from .card import Card
+    from .user import User
 
 
 class Deck(Base):
@@ -17,5 +18,8 @@ class Deck(Base):
     name: Mapped[str]
     cards: Mapped[List["Card"]] = relationship(
         secondary="deck_card", back_populates="decks"
+    )
+    users: Mapped[List["User"]] = relationship(
+        secondary="user_deck", back_populates="decks"
     )
     card_associations: Mapped["DeckCard"] = relationship(back_populates="deck")
