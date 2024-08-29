@@ -4,8 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wordcards.database import Base
 
-from .deck_card import DeckCard
-
 if TYPE_CHECKING:
     from .card import Card
     from .user import User
@@ -22,4 +20,3 @@ class Deck(Base):
     users: Mapped[List["User"]] = relationship(
         secondary="user_deck", back_populates="decks"
     )
-    card_associations: Mapped["DeckCard"] = relationship(back_populates="deck")
