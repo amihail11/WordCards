@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlalchemy import exc
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from wordcards.models.user_deck import UserDeck
@@ -13,8 +13,10 @@ def create_user_deck(db: Session, data: UserDeckData):
         db.add(user_deck)
         db.commit()
         return user_deck
-    except exc.IntegrityError as e:
-        raise HTTPException(status_code=400, detail="Bad request") from e
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=400, detail="Integrity constraint violation"
+        ) from e
 
 
 def find_all_users_decks(db: Session):

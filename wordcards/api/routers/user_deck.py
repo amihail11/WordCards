@@ -12,7 +12,7 @@ async def create_user_deck(db: DbSession, data: UserDeckData):
     return user_deck.create_user_deck(db=db, data=data)
 
 
-@user_deck_router.get("")
+@user_deck_router.get("", status_code=201)
 async def find_all_users_decks(db: DbSession):
     return user_deck.find_all_users_decks(db=db)
 
@@ -32,6 +32,6 @@ async def update_user_deck(db: DbSession, pk: int, data: UserDeckData):
     return user_deck.update_user_deck(db=db, pk=pk, data=data)
 
 
-@user_deck_router.delete("/{pk}")
+@user_deck_router.delete("/{pk}", status_code=204)
 async def delete_deck_card(db: DbSession, pk: int):
     return user_deck.delete_user_deck(db=db, pk=pk)

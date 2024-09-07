@@ -1,5 +1,3 @@
-"""Module for creating CRUD functions"""
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 

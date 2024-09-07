@@ -7,7 +7,7 @@ from wordcards.services import deck_card
 deck_card_router = APIRouter(prefix="/deck_card", tags=["deck_card"])
 
 
-@deck_card_router.post("")
+@deck_card_router.post("", status_code=201)
 async def create_deck_card(db: DbSession, data: DeckCardData):
     return deck_card.create_deck_card(db=db, data=data)
 
@@ -27,7 +27,7 @@ async def replace_deck_card(db: DbSession, pk: int, data: DeckCardData):
     return deck_card.replace_deck_card(db=db, pk=pk, data=data)
 
 
-@deck_card_router.patch("/{pk}")
+@deck_card_router.patch("/{pk}", status_code=204)
 async def update_deck_card(db: DbSession, pk: int, data: DeckCardData):
     return deck_card.update_deck_card(db=db, pk=pk, data=data)
 

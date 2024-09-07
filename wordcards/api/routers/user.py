@@ -7,7 +7,7 @@ from wordcards.services import user
 user_router = APIRouter(prefix="/user", tags=["user"])
 
 
-@user_router.post("")
+@user_router.post("", status_code=201)
 async def create_user(db: DbSession, data: UserData):
     return user.create_user(db=db, data=data)
 
@@ -32,6 +32,6 @@ async def update_user(db: DbSession, pk: int, data: UserData):
     return user.update_user(db=db, pk=pk, data=data)
 
 
-@user_router.delete("/{pk}")
+@user_router.delete("/{pk}", status_code=204)
 async def delete_user(db: DbSession, pk: int):
     return user.delete_user(db=db, pk=pk)

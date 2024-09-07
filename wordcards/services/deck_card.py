@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from wordcards.models.deck_card import DeckCard
@@ -7,10 +8,15 @@ from wordcards.schemas.deck_card import DeckCardData
 
 def create_deck_card(db: Session, data: DeckCardData):
     deck_card = DeckCard(deck_id=data.deck_id, card_id=data.card_id)
-    db.flush()
-    db.add(deck_card)
-    db.commit()
-    return deck_card
+    try:
+        db.flush()
+        db.add(deck_card)
+        db.commit()
+        return deck_card
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=400, detail="Integrity constraint violation"
+        ) from e
 
 
 def find_all_decks_cards(db: Session):
