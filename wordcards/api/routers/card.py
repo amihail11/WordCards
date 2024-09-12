@@ -17,6 +17,11 @@ async def find_all_cards(db: DbSession):
     return card.find_all_cards(db=db)
 
 
+@card_router.get("/random")
+async def find_random_word(db: DbSession):
+    return card.find_random_word(db=db)
+
+
 @card_router.get("/{pk}")
 async def find_card(db: DbSession, pk: int):
     return card.find_card(db=db, pk=pk)
@@ -32,6 +37,6 @@ async def update_card(db: DbSession, pk: int, data: CardData):
     return card.update_card(db=db, pk=pk, data=data)
 
 
-@card_router.delete("/{pk}", status_code=204)
+@card_router.delete("/{pk}")
 async def delete_card(db: DbSession, pk: int):
     return card.delete_card(db=db, pk=pk)

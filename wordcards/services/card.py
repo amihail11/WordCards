@@ -1,4 +1,7 @@
+from random import choice
+
 from fastapi import HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from wordcards.models.card import Card
@@ -53,3 +56,8 @@ def delete_card(db: Session, pk: int):
         raise HTTPException(status_code=404, detail="Card not found")
     db.commit()
     return {"success": True}
+
+
+def find_random_word(db: Session):
+    cards = db.execute(select(Card.word, Card.meaning)).all()
+    return cards
