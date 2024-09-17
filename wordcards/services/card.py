@@ -1,8 +1,6 @@
-from random import choice
-
 from fastapi import HTTPException
-from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import func
 
 from wordcards.models.card import Card
 from wordcards.schemas.card import CardData
@@ -58,6 +56,8 @@ def delete_card(db: Session, pk: int):
     return {"success": True}
 
 
-def find_random_word(db: Session):
-    cards = db.execute(select(Card.word, Card.meaning)).all()
-    return cards
+def find_random_card(db: Session):
+    random_card = (
+        db.query(Card).order_by(func.random()).first()
+    )  # pylint: disable=E1102
+    return random_card

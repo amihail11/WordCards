@@ -18,8 +18,8 @@ async def find_all_cards(db: DbSession):
 
 
 @card_router.get("/random")
-async def find_random_word(db: DbSession):
-    return card.find_random_word(db=db)
+async def find_random_card(db: DbSession):
+    return card.find_random_card(db=db)
 
 
 @card_router.get("/{pk}")
