@@ -14,5 +14,5 @@ class User(Base):
     name: Mapped[str]
     password: Mapped[str]
     decks: Mapped[List["Deck"]] = relationship(
-        secondary="user_deck", back_populates="users"
+        secondary="user_deck", back_populates="users", cascade="all, delete"
     )
