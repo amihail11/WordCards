@@ -61,3 +61,18 @@ def find_random_card(db: Session):
         db.query(Card).order_by(func.random()).first()
     )  # pylint: disable=E1102
     return random_card
+
+
+def check_answer(db: Session, pk: int, data: CardData):
+    card = db.query(Card).filter(Card.pk == pk).first()
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+    if data.word:
+        if data.word == card.word:
+            return {"success": True}
+        return {"success": False}
+    if data.meaning:
+        if data.meaning == card.meaning:
+            return {"success": True}
+        return {"success": False}
+    raise HTTPException(status_code=400, detail="No data")
