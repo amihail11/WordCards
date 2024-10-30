@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import func
+from sqlalchemy.sql.expression import func, select
 
 from wordcards.models.card import Card
 from wordcards.schemas.card import CardData
@@ -57,9 +57,8 @@ def delete_card(db: Session, pk: int):
 
 
 def find_random_card(db: Session):
-    random_card = (
-        db.query(Card).order_by(func.random()).first()
-    )  # pylint: disable=E1102
+    # pylint: disable=E1102
+    random_card = db.query(Card).order_by(func.random()).first()
     return random_card
 
 
@@ -76,3 +75,10 @@ def check_answer(db: Session, pk: int, data: CardData):
             return {"success": True}
         return {"success": False}
     raise HTTPException(status_code=400, detail="No data")
+
+
+def get_card_side(db: Session, pk: int):
+    card_side = db.scalars(select(Card.word).where(Card.pk == pk)).first()
+    if not card_side:
+        raise HTTPException(status_code=404, detail="Card side not found")
+    return card_side

@@ -45,3 +45,8 @@ async def delete_card(db: DbSession, pk: int):
 @card_router.get("/{pk}/check")
 async def check_answer(db: DbSession, pk: int, data: CardData):
     return card.check_answer(db=db, pk=pk, data=data)
+
+
+@card_router.get("/{pk}/card_side")
+async def get_card_side(db: DbSession, pk: int):
+    return card.get_card_side(db=db, pk=pk)
