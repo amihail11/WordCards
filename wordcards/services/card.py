@@ -1,6 +1,6 @@
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import func, select
+from sqlalchemy.orm import Session, load_only
+from sqlalchemy.sql.expression import func
 
 from wordcards.models.card import Card
 from wordcards.schemas.card import CardData
@@ -78,7 +78,9 @@ def check_answer(db: Session, pk: int, data: CardData):
 
 
 def get_card_side(db: Session, pk: int):
-    card_side = db.scalars(select(Card.word).where(Card.pk == pk)).first()
+    card_side = (
+        db.query(Card).filter(Card.pk == pk).options(load_only(Card.word)).first()
+    )
     if not card_side:
         raise HTTPException(status_code=404, detail="Card side not found")
     return card_side
