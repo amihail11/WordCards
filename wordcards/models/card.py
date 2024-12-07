@@ -6,6 +6,7 @@ from wordcards.database import Base
 
 if TYPE_CHECKING:
     from .deck import Deck
+    from .user import User
 
 
 class Card(Base):
@@ -17,4 +18,7 @@ class Card(Base):
     meaning: Mapped[str]
     decks: Mapped[List["Deck"]] = relationship(
         secondary="deck_card", back_populates="cards"
+    )
+    users: Mapped[List["User"]] = relationship(
+        secondary="user_card", back_populates="cards"
     )
