@@ -7,12 +7,12 @@ from wordcards.services import user_deck
 user_deck_router = APIRouter(prefix="/user_deck", tags=["user_deck"])
 
 
-@user_deck_router.post("")
+@user_deck_router.post("", status_code=201)
 async def create_user_deck(db: DbSession, data: UserDeckData):
     return user_deck.create_user_deck(db=db, data=data)
 
 
-@user_deck_router.get("", status_code=201)
+@user_deck_router.get("")
 async def find_all_users_decks(db: DbSession):
     return user_deck.find_all_users_decks(db=db)
 
