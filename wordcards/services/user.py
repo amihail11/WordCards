@@ -6,7 +6,7 @@ from wordcards.schemas.user import UserData
 
 
 def create_user(db: Session, data: UserData):
-    user = User(name=data.name, password=data.password)
+    user = User(name=data.name, password=data.password, login=data.login)
     db.flush()
     db.add(user)
     db.commit()

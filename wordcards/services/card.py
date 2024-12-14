@@ -1,8 +1,11 @@
+from time import localtime, strftime
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session, load_only
 from sqlalchemy.sql.expression import func
 
 from wordcards.models.card import Card
+from wordcards.models.user_card import UserCard
 from wordcards.schemas.card import CardData
 
 
@@ -24,6 +27,19 @@ def find_card(db: Session, pk: int):
 def find_all_cards(db: Session):
     all_cards = db.query(Card).order_by(Card.pk).all()
     return all_cards
+
+
+def find_random_card(db: Session):
+    current_time = strftime("%Y-%m-%d %H:%M:%S", localtime())
+    # pylint: disable=E1102
+    user_card = (
+        db.query(UserCard)
+        .filter(UserCard.demo_time <= current_time)
+        .order_by(func.random())
+        .first()
+    )
+    card = db.query(Card).filter(Card.pk == user_card.card_id).first()
+    return card
 
 
 def replace_card(db: Session, pk, data: CardData):
@@ -56,20 +72,10 @@ def delete_card(db: Session, pk: int):
     return {"success": True}
 
 
-def find_random_card(db: Session):
-    # pylint: disable=E1102
-    random_card = db.query(Card).order_by(func.random()).first()
-    return random_card
-
-
 def check_answer(db: Session, pk: int, data: CardData):
     card = db.query(Card).filter(Card.pk == pk).first()
     if not card:
         raise HTTPException(status_code=404, detail="Card not found")
-    if data.word:
-        if data.word == card.word:
-            return {"success": True}
-        return {"success": False}
     if data.meaning:
         if data.meaning == card.meaning:
             return {"success": True}

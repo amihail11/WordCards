@@ -16,5 +16,6 @@ class UserCard(Base):
     )
     demo_time: Mapped[str]
     study_day: Mapped[int]
+    status: Mapped[str]
 
     __table_args__ = (UniqueConstraint("user_id", "card_id", name="unique_user_card"),)

@@ -17,7 +17,7 @@ async def find_all_cards(db: DbSession):
     return card.find_all_cards(db=db)
 
 
-@card_router.get("/random")
+@card_router.get("/question")
 async def find_random_card(db: DbSession):
     return card.find_random_card(db=db)
 
@@ -42,7 +42,7 @@ async def delete_card(db: DbSession, pk: int):
     return card.delete_card(db=db, pk=pk)
 
 
-@card_router.get("/{pk}/check")
+@card_router.post("/{pk}/check")
 async def check_answer(db: DbSession, pk: int, data: CardData):
     return card.check_answer(db=db, pk=pk, data=data)
 
