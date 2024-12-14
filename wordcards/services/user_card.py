@@ -1,3 +1,5 @@
+from time import localtime, mktime, strftime
+
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -66,16 +68,71 @@ def delete_user_card(db: Session, pk: int):
     return {"success": True}
 
 
-# def set_demo_time(db: Session, pk: int, grade: str):
-#     current = localtime()
-# interval = 2
-# new_current = current[2]
-# sec = mktime(current)
-# later = sec + 24*3600*2
-# form_later = localtime(later)
-# current_str = strftime("%Y-%m-%d %H:%M:%S", current)
-# form_str = strftime("%Y-%m-%d %H:%M:%S", form_later)
-#     interval = int()
-#     grade_time = localtime()
-#     if grade=="don't_know":
-#         interval = 1
+def grade_answer(db: Session, pk: int, grade: str):
+    answer_time = localtime()
+    user_card = db.query(UserCard).filter(UserCard.pk == pk).first()
+    if grade == "dont_know":
+        if user_card.status == "learn":
+            interval = 60
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+        elif user_card.status == "revise":
+            interval = 360
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.status = "learn"
+        else:
+            interval = 60
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.status = "learn"
+    elif grade == "difficult":
+        if user_card.status == "revise":
+            interval = (2.5 * user_card.study_day + 1) * 86400 / 1.5
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.study_day += 1
+        elif user_card.status == "learn":
+            interval = (2.5 * user_card.study_day + 1) * 86400 / 2
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.study_day += 1
+        else:
+            interval = 300
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.status = "learn"
+    elif grade == "good":
+        if user_card.status == "revise":
+            interval = (2.5 * user_card.study_day + 1) * 86400
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.study_day += 1
+        elif user_card.status == "learn":
+            interval = (2.5 * user_card.study_day + 1) * 86400
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.study_day += 1
+        else:
+            interval = 300
+            next_demo = (2.5 * user_card.study_day + 1) * 86400
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.status = "learn"
+    else:
+        if user_card.status == "revise":
+            interval = (2.5 * user_card.study_day + 1) * 86400 * 1.3
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.study_day += 1
+        elif user_card.status == "learn":
+            interval = (2.5 * user_card.study_day + 1) * 86400 * 1.3
+            next_demo = interval + mktime(answer_time)
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.study_day += 1
+        else:
+            interval = 300
+            next_demo = (2.5 * user_card.study_day + 1) * 86400 * 1.3
+            user_card.demo_time = strftime("%Y-%m-%d %H:%M:%S", localtime(next_demo))
+            user_card.status = "learn"
+    db.commit()
+    return user_card

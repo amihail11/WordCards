@@ -37,6 +37,6 @@ async def delete_user_card(db: DbSession, pk: int):
     return user_card.delete_user_card(db=db, pk=pk)
 
 
-# @user_card_router.post("/{pk}")
-# async def set_demo_time(db: DbSession, pk: int, grade: str):
-#     return user_card.set_demo_time(db=db, pk=pk, grade=grade)
+@user_card_router.patch("/{pk}/grade")
+async def grade_answer(db: DbSession, pk: int, grade: str):
+    return user_card.grade_answer(db=db, pk=pk, grade=grade)

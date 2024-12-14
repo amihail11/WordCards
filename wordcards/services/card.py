@@ -78,8 +78,8 @@ def check_answer(db: Session, pk: int, data: CardData):
         raise HTTPException(status_code=404, detail="Card not found")
     if data.meaning:
         if data.meaning == card.meaning:
-            return {"success": True}
-        return {"success": False}
+            return {"success": True}, card
+        return {"success": False}, card
     raise HTTPException(status_code=400, detail="No data")
 
 
